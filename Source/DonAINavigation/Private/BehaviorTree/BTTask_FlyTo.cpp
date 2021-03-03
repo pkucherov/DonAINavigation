@@ -14,6 +14,7 @@
 
 #include "BehaviorTree/BTTask_FlyTo.h"
 #include "../DonAINavigationPrivatePCH.h"
+#include "IDonAINavigation.h"
 
 #include "DonNavigatorInterface.h"
 
@@ -81,6 +82,17 @@ EBTNodeResult::Type UBTTask_FlyTo::SchedulePathfindingRequest(UBehaviorTreeCompo
 	auto myMemory    =  (FBT_FlyToTarget*)NodeMemory;
 	auto blackboard  =  pawn ? pawn->GetController()->FindComponentByClass<UBlackboardComponent>() : NULL;
 
+	if (!pawn)
+	{
+		UE_LOG(DoNNavigationLog, Log, TEXT("BTTask_FlyTo has invalid data for AI Pawn is null."));
+	}
+	/*
+	 *PK CRASH
+	 * E4Editor_DonAINavigation!TSet<AActor *,DefaultKeyFuncs<AActor *,0>,FDefaultSetAllocator>::FindId() [C:\EpicGames\UE_4.26\Engine\Source\Runtime\Core\Public\Containers\Set.h:779]
+UE4Editor_DonAINavigation!UBTTask_FlyTo::SchedulePathfindingRequest() [C:\UnrealProjects\DonNavigationSamples\Plugins\DonAINavigation\Source\DonAINavigation\Private\BehaviorTree\BTTask_FlyTo.cpp:93]
+UE4Editor_DonAINavigation!UBTTask_FlyTo::ExecuteTask() [C:\UnrealProjects\DonNavigationSamples\Plugins\DonAINavigation\Source\DonAINavigation\Private\BehaviorTree\BTTask_FlyTo.cpp:59]
+
+	 */
 	/*const float currentTime = GetWorld()->GetRealTimeSeconds();
 	const float lastRequestTimestamp = LastRequestTimestamps.FindOrAdd(pawn);
 	if (currentTime - lastRequestTimestamp < RequestThrottleInterval)
@@ -89,6 +101,13 @@ EBTNodeResult::Type UBTTask_FlyTo::SchedulePathfindingRequest(UBehaviorTreeCompo
 		LastRequestTimestamps.Add(pawn, currentTime); //LastRequestTimestamp = currentTime;
 		*/
 	NavigationManager =  UDonNavigationHelper::DonNavigationManagerForActor(pawn);
+
+	if (!NavigationManager)
+	{
+		UE_LOG(DoNNavigationLog, Log, TEXT("BTTask_FlyTo has invalid data for NavigationManager is null."));
+		return HandleTaskFailure(OwnerComp, NodeMemory, blackboard);
+	}
+	
 	if (NavigationManager->HasTask(pawn) && !QueryParams.bForceRescheduleQuery)
 		return EBTNodeResult::Failed; // early exit instead of going through the manager's internal checks and fallback via HandleTaskFailure (which isn't appropriate here)
 	

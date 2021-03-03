@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "ModuleManager.h"
+#include <Runtime/Core/Public/Modules/ModuleManager.h>
 
 DECLARE_LOG_CATEGORY_EXTERN(DoNNavigationLog, Log, All);
 

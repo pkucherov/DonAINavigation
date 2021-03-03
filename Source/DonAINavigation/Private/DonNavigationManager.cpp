@@ -15,6 +15,7 @@
 #include "DonNavigationManager.h"
 #include "DonAINavigationPrivatePCH.h"
 #include "Multithreading/DonNavigationWorker.h"
+#include "Engine.h"
 
 #include <stdio.h>
 #include <limits>
@@ -284,7 +285,7 @@ void ADonNavigationManager::OnConstruction(const FTransform& Transform)
 #if WITH_EDITOR
 void ADonNavigationManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {	
-	UProperty* PropertyThatChanged = PropertyChangedEvent.Property;
+	FProperty* PropertyThatChanged = PropertyChangedEvent.Property;
 	FName PropertyName = PropertyThatChanged != NULL ? PropertyThatChanged->GetFName() : NAME_None;
 	
 	if (PropertyName == GET_MEMBER_NAME_CHECKED(ADonNavigationManager, bDisplayWorldBoundary))

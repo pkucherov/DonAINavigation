@@ -14,12 +14,10 @@
 
 #pragma once
 
-#include <functional>
+#include <utility>
 #include <queue>
-#include <vector>
-
 #if PLATFORM_WINDOWS
-#include "AllowWindowsPlatformTypes.h"
+#include "Runtime/Core/Public/Windows/AllowWindowsPlatformTypes.h"
 #elif PLATFORM_XBOXONE
 #include "XboxOneAllowPlatformTypes.h"
 #endif
@@ -95,5 +93,5 @@ namespace DoNNavigation
 }
 
 #if PLATFORM_WINDOWS
- #include "HideWindowsPlatformTypes.h"
+ #include "Runtime/Core/Public/Windows/HideWindowsPlatformTypes.h"
  #endif
